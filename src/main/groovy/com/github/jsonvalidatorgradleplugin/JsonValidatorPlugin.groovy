@@ -1,4 +1,4 @@
-package com.github.json_validator_gradle_plugin
+package com.github.jsonvalidatorgradleplugin
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -12,6 +12,6 @@ class JsonValidatorPlugin implements Plugin<Project> {
 
     @Override
     void apply(Project target) {
-        target.tasks.register("validateJson", JsonValidatorTask)
+        target.tasks.register('validateJson', JsonValidatorTask)
     }
 }

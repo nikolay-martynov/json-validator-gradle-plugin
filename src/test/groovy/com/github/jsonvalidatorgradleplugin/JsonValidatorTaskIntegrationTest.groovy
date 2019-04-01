@@ -1,4 +1,4 @@
-package com.github.json_validator_gradle_plugin
+package com.github.jsonvalidatorgradleplugin
 
 
 import org.gradle.testkit.runner.BuildResult

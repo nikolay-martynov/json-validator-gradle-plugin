@@ -1,4 +1,4 @@
-package com.github.json_validator_gradle_plugin
+package com.github.jsonvalidatorgradleplugin
 
 import groovy.transform.CompileStatic
 import org.everit.json.schema.Schema
@@ -41,8 +41,8 @@ class JsonValidatorTask extends DefaultTask {
      * Creates an instance.
      */
     JsonValidatorTask() {
-        group = "verification"
-        description = "Validates JSON files against schema"
+        group = 'verification'
+        description = 'Validates JSON files against schema'
     }
 
     /**
@@ -71,17 +71,15 @@ class JsonValidatorTask extends DefaultTask {
                         schema.validate(new JSONObject(new JSONTokener(jsonFileStream)))
                     }
                 } catch (ValidationException e) {
-                    if (!errors[jsonFile]) {
-                        errors[jsonFile] = []
-                    }
-                    errors[jsonFile].addAll(e.getAllMessages())
+                    errors[jsonFile] = e.allMessages
                 }
             }
         }
         if (errors) {
-            throw new GradleException("There are JSON validation errors:\n" + errors.collect { k, v ->
-                "- $k\n${v.collect({ e -> "\t- $e" }).join("\n")}"
-            }.join("\n"))
+            throw new GradleException("There are JSON validation errors:${System.lineSeparator()}"
+                    + errors.collect { k, v ->
+                "- $k${System.lineSeparator()}${v.collect { e -> "\t- $e" }.join(System.lineSeparator())}"
+            }.join(System.lineSeparator()))
         }
     }
 
