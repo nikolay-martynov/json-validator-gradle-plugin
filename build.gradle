@@ -1,0 +1,97 @@
+plugins {
+    id "groovy"
+    id "java-gradle-plugin"
+    id "maven-publish"
+}
+
+def compatibilityVersion = 1.8
+sourceCompatibility = compatibilityVersion
+targetCompatibility = compatibilityVersion
+group = 'com.github.json-validator-gradle-plugin'
+version = '1.0.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+    compile gradleApi()
+    compile localGroovy()
+    compile "com.github.everit-org.json-schema:org.everit.json.schema:1.11.1"
+    testCompile('org.spockframework:spock-core:1.0-groovy-2.4') {
+        exclude group: 'org.codehaus.groovy'
+    }
+}
+
+test {
+    testLogging {
+        exceptionFormat = 'full'
+    }
+}
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'Gradle JSON Validator plugin',
+                'Implementation-Version': version,
+                'Built-By': System.getProperty('user.name'),
+                'Built-Date': new Date(),
+                'Built-JDK': System.getProperty('java.version'),
+                'Built-Gradle': gradle.gradleVersion
+    }
+}
+
+task sourcesJar(type: Jar) {
+    classifier 'sources'
+    from sourceSets.main.allSource
+}
+
+task groovydocJar(type: Jar, dependsOn: groovydoc) {
+    classifier 'groovydoc'
+    from groovydoc.destinationDir
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives groovydocJar
+    archives javadocJar
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+            artifact groovydocJar
+            artifact javadocJar
+
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('name', 'Gradle JSON Validator plugin')
+                root.appendNode('description', 'Gradle plugin that validates JSON files against JSON Schema.')
+                root.appendNode('inceptionYear', '2019')
+
+                def license = root.appendNode('licenses').appendNode('license')
+                license.appendNode('name', 'The Apache Software License, Version 2.0')
+                license.appendNode('url', 'http://www.apache.org/licenses/LICENSE-2.0.txt')
+                license.appendNode('distribution', 'repo')
+            }
+        }
+    }
+}
+
+gradlePlugin {
+    plugins {
+        "json-validator-gradle-plugin" {
+            id = 'com.github.json-validator-gradle-plugin'
+            implementationClass = 'com.github.json_validator_gradle_plugin.JsonValidatorPlugin'
+        }
+    }
+}
+
+build.dependsOn publishToMavenLocal
