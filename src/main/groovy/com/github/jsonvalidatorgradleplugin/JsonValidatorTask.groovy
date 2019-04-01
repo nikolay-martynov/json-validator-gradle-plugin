@@ -10,6 +10,7 @@ import org.gradle.api.file.FileCollection
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.TaskAction
+import org.json.JSONException
 import org.json.JSONObject
 import org.json.JSONTokener
 
@@ -70,6 +71,8 @@ class JsonValidatorTask extends DefaultTask {
                     jsonFile.withInputStream { jsonFileStream ->
                         schema.validate(new JSONObject(new JSONTokener(jsonFileStream)))
                     }
+                } catch (JSONException e) {
+                    errors[jsonFile] = [e.message]
                 } catch (ValidationException e) {
                     errors[jsonFile] = e.allMessages
                 }

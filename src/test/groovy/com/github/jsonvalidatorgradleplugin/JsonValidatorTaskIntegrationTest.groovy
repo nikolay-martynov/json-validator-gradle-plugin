@@ -76,6 +76,25 @@ validateJson {
         result.output.contains("tags")
     }
 
+    def "tells file name if not json"() {
+        buildFile << """
+validateJson {
+    schemaFile = file("${new File("src/test/resources/schema.json").absolutePath}")
+    jsonFiles = file("${new File("src/test/resources/notjson.json").absolutePath}")
+}
+        """
+        when:
+        BuildResult result = GradleRunner.create()
+                .withProjectDir(testProjectDir.root)
+                .withPluginClasspath()
+                .withArguments("validateJson")
+                .buildAndFail()
+
+        then:
+        result.task(":validateJson").outcome == TaskOutcome.FAILED
+        result.output.contains("notjson.json")
+    }
+
     def "can validate multiple files and use exclusions"() {
         buildFile << """
 validateJson {
