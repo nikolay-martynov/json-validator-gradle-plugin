@@ -3,6 +3,7 @@ plugins {
     id "java-gradle-plugin"
     id "maven-publish"
     id 'ru.vyarus.quality' version '3.4.0'
+    id "com.github.ben-manes.versions" version "0.21.0"
 }
 
 def compatibilityVersion = 1.8
@@ -20,7 +21,7 @@ dependencies {
     compile gradleApi()
     compile localGroovy()
     compile "com.github.everit-org.json-schema:org.everit.json.schema:1.11.1"
-    testCompile('org.spockframework:spock-core:1.0-groovy-2.4') {
+    testCompile('org.spockframework:spock-core:1.3-RC1-groovy-2.5') {
         exclude group: 'org.codehaus.groovy'
     }
 }
@@ -93,6 +94,10 @@ gradlePlugin {
             implementationClass = 'com.github.jsonvalidatorgradleplugin.JsonValidatorPlugin'
         }
     }
+}
+
+wrapper {
+    distributionType = Wrapper.DistributionType.ALL
 }
 
 build.dependsOn publishToMavenLocal
