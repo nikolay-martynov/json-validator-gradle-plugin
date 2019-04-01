@@ -10,7 +10,7 @@ def compatibilityVersion = 1.8
 sourceCompatibility = compatibilityVersion
 targetCompatibility = compatibilityVersion
 group = 'com.github.json-validator-gradle-plugin'
-version = '1.0.0-SNAPSHOT'
+version = '1.0.0'
 
 repositories {
     mavenCentral()
