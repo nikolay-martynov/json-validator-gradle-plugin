@@ -40,10 +40,10 @@ apply plugin: com.github.jsonvalidatorgradleplugin.JsonValidatorPlugin
 
 Plugin registers default task *validateJson* that has to be configured:
 
-Property name|Type|Description
-------------------------------
-schemaFile|File|JSON Schema
-jsonFiles|File or FileCollection|JSON files to be validated
+Property name | Type | Description
+--------------|------|------------
+schemaFile | File | JSON Schema
+jsonFiles | File or FileCollection | JSON files to be validated
 
 To validate a single file, use *file*:
 
